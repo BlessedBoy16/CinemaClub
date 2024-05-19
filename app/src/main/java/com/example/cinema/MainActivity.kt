@@ -3,7 +3,6 @@ package com.example.cinema
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -27,6 +27,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.cinema.data.User
 import com.example.cinema.ui.theme.CinemaTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,15 +54,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    mainContent()
+                    mainContent(users = listOf())
                  }
             }
         }
     }
 }
-
 @Composable
-fun mainContent() {
+fun mainContent(users: List<User>) {
+    var users by remember { mutableStateOf(users) }
     Column {
         LazyColumn {
             item {
@@ -74,8 +80,20 @@ fun mainContent() {
                 )
             }
             item {
-                button()
-            }
+                Column(modifier = Modifier
+                    .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                Button(onClick = {
+                    users = users.toMutableList().also {
+                        it.add(0, User(123, "123"))
+                    }
+                },
+                    colors = ButtonDefaults.buttonColors(Color.DarkGray)) {
+                    Text(text = "Записаться")
+                        }
+                    }
+                }
             item {
                 Text(
                     text = "Участники",
@@ -90,9 +108,10 @@ fun mainContent() {
             item{
                 LazyRow(modifier = Modifier
                     .padding(16.dp,24.dp)) {
-                        items(10) {
+                        items(users) {
+                            user ->
                             Spacer(modifier = Modifier.width(4.dp))
-                            PersonView(name = "Имя")
+                            PersonView(name = user.name)
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
@@ -139,21 +158,24 @@ fun description(text: String){
     )
 }
 
-@Composable
-fun button(){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(onClick = { /*TODO*/ },
-            colors = ButtonDefaults.buttonColors(Color.DarkGray)) {
-            Text("Записаться")
-        }
-    }
-}
+//@Composable
+//fun button(users: List<User>){
+//    var users by remember { mutableStateOf(users) }
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .fillMaxHeight(),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Button(onClick = { users = users.toMutableList().also {
+//            it.add(0, User(123, "123"))
+//        } },
+//            colors = ButtonDefaults.buttonColors(Color.DarkGray)) {
+//            Text("Записаться")
+//        }
+//    }
+//}
 @Composable
 fun PersonView(name: String) {
     Card(
