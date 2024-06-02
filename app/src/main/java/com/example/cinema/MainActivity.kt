@@ -26,6 +26,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.cinema.data.Cinema
 import com.example.cinema.data.User
 import com.example.cinema.ui.theme.CinemaTheme
 
@@ -52,7 +55,6 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
                 ) {
                     mainContent(users = listOf())
                  }
@@ -88,8 +90,7 @@ fun mainContent(users: List<User>) {
                     users = users.toMutableList().also {
                         it.add(0, User(123, "123"))
                     }
-                },
-                    colors = ButtonDefaults.buttonColors(Color.DarkGray)) {
+                }) {
                     Text(text = "Записаться")
                         }
                     }
@@ -133,7 +134,6 @@ fun cinemaTitle(name: String) {
         )
     )
 }
-
 @Composable
 fun poster(url: String) {
     AsyncImage(
@@ -145,7 +145,6 @@ fun poster(url: String) {
 
     )
 }
-
 @Composable
 fun description(text: String){
     Text(
@@ -157,25 +156,6 @@ fun description(text: String){
         )
     )
 }
-
-//@Composable
-//fun button(users: List<User>){
-//    var users by remember { mutableStateOf(users) }
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .fillMaxHeight(),
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Button(onClick = { users = users.toMutableList().also {
-//            it.add(0, User(123, "123"))
-//        } },
-//            colors = ButtonDefaults.buttonColors(Color.DarkGray)) {
-//            Text("Записаться")
-//        }
-//    }
-//}
 @Composable
 fun PersonView(name: String) {
     Card(
@@ -194,11 +174,10 @@ fun PersonView(name: String) {
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-
             )
             Text(
                 text = name,
-                fontSize = 20.sp,
+                fontSize = 12.sp,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
             )
